@@ -3,6 +3,9 @@ from basic_task import BasicTask
 # 抓取过快问题
 # 抓取判重问题
 # 最后检测时间
+from time import ctime, sleep
+
+
 class Accounts(BasicTask):
     """
     取当前帐户的关联信息
@@ -10,7 +13,10 @@ class Accounts(BasicTask):
 
     def __init__(self):
         BasicTask.__init__(self)
-        self.uk = '1883386731'
+        self.db = self.conn.accounts
+        # self.uk = '1883386731'
+        # self.uk = '2352358940'
+        self.uk = '103309796'
         self.total = 0
         self.limit = 24
         #
@@ -42,14 +48,16 @@ class Accounts(BasicTask):
         self.gen_task()
 
     def save_follows(self, follow_list):
-        # 保存follow记录
-        pass
+        self.db.accounts.insert_many(follow_list)
 
     def get_first_task(self):
         url = self.url_tpl.format(uk=self.uk, limit=self.limit, start=0)
+        import time
+
         result = self.get_response(url)
         self.total = result['total_count']
-        self.save_follows(result['get_follows'])
+        self.save_follows(result['follow_list'])
+        sleep(1)
 
 
     def gen_task(self):
@@ -58,4 +66,10 @@ class Accounts(BasicTask):
         :return:
         """
         for i in range(1, self.total / self.limit):
-            print i
+            url = self.url_tpl.format(uk=self.uk, limit=self.limit, start=i * self.limit)
+            print i * self.limit
+            result = self.get_response(url)
+            self.save_follows(result['follow_list'])
+if __name__ =='__main__':
+    accounts = Accounts()
+    accounts.execute()
