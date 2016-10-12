@@ -5,12 +5,12 @@ import pymongo
 # 抓取过快问题
 class BasicTask():
     def __init__(self):
-        self.conn = pymongo.MongoClient("127.0.0.1",27017)
+        self.conn = pymongo.MongoClient("127.0.0.1", 27017)
         pass
 
-    def get_response(self,url, headers={}):
+    def get_response(self, url, headers={}):
         response_json = None
-
+        # TODO 错误处理，如果出错，延迟1分钟
         try:
             request = urllib2.Request(url, headers=headers)
             response = urllib2.urlopen(request)

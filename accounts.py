@@ -1,6 +1,6 @@
 # coding: utf8
 from basic_task import BasicTask
-# 抓取过快问题
+# 抓取过快问题通过sleep(1)解决掉
 # 抓取判重问题
 # 最后检测时间
 from time import ctime, sleep
@@ -46,14 +46,13 @@ class Accounts(BasicTask):
         """
         self.get_first_task()
         self.gen_task()
+        # 更新 self.uk对的信息
 
     def save_follows(self, follow_list):
         self.db.accounts.insert_many(follow_list)
 
     def get_first_task(self):
         url = self.url_tpl.format(uk=self.uk, limit=self.limit, start=0)
-        import time
-
         result = self.get_response(url)
         self.total = result['total_count']
         self.save_follows(result['follow_list'])
@@ -67,7 +66,6 @@ class Accounts(BasicTask):
         """
         for i in range(1, self.total / self.limit):
             url = self.url_tpl.format(uk=self.uk, limit=self.limit, start=i * self.limit)
-            print i * self.limit
             result = self.get_response(url)
             self.save_follows(result['follow_list'])
 if __name__ =='__main__':
