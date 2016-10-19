@@ -24,7 +24,7 @@ url = "https://yun.baidu.com/pcloud/friend/getfollowlist?query_uk=1883386731&lim
 """
 
 
-def get_result(url, headers={}):
+def get_response(url, headers={}):
     try:
         request = urllib2.Request(url, headers=headers)
         response = urllib2.urlopen(request)
@@ -39,10 +39,10 @@ def get_follows(result):
     for row in result['follow_list']:
         # print "{follow_uname}\t{pubshare_count}\t{follow_count}".format(row)
         print "%s\t%s\t%s\t%s\t%s" % (row['follow_uname'],
-                                  row['follow_uk'],
-                                  row['fans_count'],
-                                  row['pubshare_count'],
-                                  row['follow_count'])
+                                      row['follow_uk'],
+                                      row['fans_count'],
+                                      row['pubshare_count'],
+                                      row['follow_count'])
 
 
 # result = get_result(url.format(start=0))
@@ -55,18 +55,18 @@ def get_follows(result):
 #     get_follows(result)
 
 
-for i in range(0, 2000 / 25):
-    print i
+
 #
-# params = {'Referer': 'https://yun.baidu.com',
-#           'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36',
-#           'X-Requested-With': 'XMLHttpRequest'
-# }
-# # 分享
-# response_json = get_result(
-#     'https://yun.baidu.com/pcloud/feed/getsharelist?auth_type=1&start=0&limit=20&query_uk=1260121397', params)
-# for record in response_json['records']:
-#     print record['shorturl'], record['title']
+params = {'Referer': 'https://yun.baidu.com',
+          'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36',
+          'X-Requested-With': 'XMLHttpRequest'
+}
+# 分享
+# response_json = get_result('https://yun.baidu.com/pcloud/feed/getsharelist?auth_type=1&start=0&limit=20&query_uk=1260121397', params)
+response_json = get_response('https://yun.baidu.com/pcloud/feed/getsharelist?auth_type=1&start=0&limit=20&query_uk=2636470911', params)
+for record in response_json['records']:
+    print record
+    # print record['shorturl'], record['title']
 #
 # share_list = "https://yun.baidu.com/share/list?uk=1260121397&shareid=1846820413&page=1&num=100&dir=%2F%E6%88%91%E7%9A%84%E9%9F%B3%E4%B9%90%2FM_backup%2FBD003%2F%E5%93%88%E5%A1%9E%E3%80%81%E8%83%A1%E6%A2%85%E5%B0%94%E3%80%81%E9%9C%8D%E5%A4%AB%E6%9B%BC%E6%9B%BC%E9%99%80%E9%93%83%E5%8D%8F%E5%A5%8F%E6%9B%B2&order=time&desc=1"
 # response_json = get_result(share_list, params)

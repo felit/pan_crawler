@@ -6,7 +6,8 @@ import pymongo
 class BasicTask():
     def __init__(self):
         self.conn = pymongo.MongoClient("127.0.0.1", 27017)
-        pass
+        self.db = self.conn.accounts
+        self.sleep_time_len = 90
 
     def get_response(self, url, headers={}):
         response_json = None
