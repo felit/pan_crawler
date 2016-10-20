@@ -16,8 +16,26 @@ class BasicTask():
             request = urllib2.Request(url, headers=headers)
             response = urllib2.urlopen(request)
             response_json = response.read()
-            print response_json
+            # print url
+            # print response_json
             result = json.loads(response_json)
             return result
         except Exception as ex:
+            print ex
             print response_json
+
+
+"""
+Traceback (most recent call last):
+None
+  File "/data/source/self/crawler_python/accounts_scheduler.py", line 22, in <module>
+    scheduler.inter()
+  File "/data/source/self/crawler_python/accounts_scheduler.py", line 17, in inter
+    Accounts(account['follow_uk']).execute()
+  File "/data/source/self/crawler_python/accounts.py", line 44, in execute
+    self.get_first_task()
+  File "/data/source/self/crawler_python/accounts.py", line 60, in get_first_task
+    if(result.has_key('follow_list')):
+AttributeError: 'NoneType' object has no attribute 'has_key'
+
+"""

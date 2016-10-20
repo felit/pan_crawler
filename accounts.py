@@ -11,9 +11,10 @@ class Accounts(BasicTask):
     取当前帐户的关联信息
     """
 
-    def __init__(self,follow_uk='1493351221'):
+    def __init__(self, follow_uk='1493351221'):
         BasicTask.__init__(self)
         self.uk = follow_uk
+        print(self.uk)
         self.total = 0
         self.limit = 24
         #
@@ -52,12 +53,13 @@ class Accounts(BasicTask):
     def save_follows(self, follow_list):
         for row in follow_list:
             row['follow_uk'] = str(row['follow_uk'])
+            row['parent_follow_uk'] = self.uk
         self.db.accounts.insert_many(follow_list)
 
     def get_first_task(self):
         url = self.url_tpl.format(uk=self.uk, limit=self.limit, start=0)
         result = self.get_response(url)
-        if(result.has_key('follow_list')):
+        if (result.has_key('follow_list')):
             self.total = result['total_count']
             self.save_follows(result['follow_list'])
             sleep(1)
@@ -73,7 +75,7 @@ class Accounts(BasicTask):
         for i in range(1, self.total / self.limit):
             url = self.url_tpl.format(uk=self.uk, limit=self.limit, start=i * self.limit)
             result = self.get_response(url)
-            if(result.has_key('follow_list')):
+            if (result.has_key('follow_list')):
                 self.save_follows(result['follow_list'])
             else:
                 sleep(self.sleep_time_len)

@@ -12,9 +12,11 @@ class AccountsScheduler(BasicTask):
     def inter(self):
         account = 2
         while (account is not None):
-            account = self.db.accounts.find_one({'crawler': {'$exists': True}, 'follow_count': {'$gt': 10}})
+            account = self.db.accounts.find_one({'crawler': {'$exists': False}, 'follow_count': {'$gt': 10}})
             if account is not None:
                 Accounts(account['follow_uk']).execute()
+            else:
+                Accounts().execute()
 
 
 if __name__ == '__main__':
