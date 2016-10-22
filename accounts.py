@@ -53,8 +53,10 @@ class Accounts(BasicTask):
     def save_follows(self, follow_list):
         for row in follow_list:
             row['follow_uk'] = str(row['follow_uk'])
-            row['parent_follow_uk'] = self.uk
-        self.db.accounts.insert_many(follow_list)
+            row['parent_follow_uk'] = [self.uk]
+            self.db.accounts.update({'follow_uk': row['follow_uk']}, {'$set': row}, upsert=True)
+            # TODO　更新
+            # self.db.accounts.insert_many(follow_list)
 
     def get_first_task(self):
         url = self.url_tpl.format(uk=self.uk, limit=self.limit, start=0)

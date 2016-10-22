@@ -1,6 +1,7 @@
 # coding:utf8
 # 按follow抓取
-# 按fans抓取
+# 按fans抓取　太多，且很多共享内容为空
+#　进程死掉的时候，重启进程
 from basic_task import BasicTask
 from accounts import Accounts
 

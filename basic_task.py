@@ -11,17 +11,19 @@ class BasicTask():
 
     def get_response(self, url, headers={}):
         response_json = None
+        print 'url:%s'%url
+        print headers
         # TODO 错误处理，如果出错，延迟1分钟
         try:
             request = urllib2.Request(url, headers=headers)
             response = urllib2.urlopen(request)
             response_json = response.read()
             # print url
-            # print response_json
+            print response_json
             result = json.loads(response_json)
             return result
         except Exception as ex:
-            print ex
+            # print ex
             print response_json
 
 
