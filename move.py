@@ -37,7 +37,7 @@ for row in db.accounts.find({}):
         follow_time=time.strftime('%Y-%m-%d %H-%M-%S',time.gmtime(row['follow_time'])),
         create_time=datetime.datetime.today(),
         update_time=datetime.datetime.today(),
-        is_follow_crawler=False,
+        is_follow_crawler=row['crawler'] if 'crawler' in row else False,
         is_files_crawler=False
     )
     # print sql
