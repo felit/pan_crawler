@@ -55,6 +55,9 @@ class Shared(BasicTask):
                 # update by shorturl
                 self.db.shared_files.insert_many(response_json['records'])
 
+    def save_records(self,records):
+        # TODO存储至mysql
+        self.cursor.execute()
 
 if __name__ == '__main__':
     shared = Shared('2636470911')

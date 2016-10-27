@@ -43,7 +43,6 @@ for row in db.accounts.find({}):
     # print sql
     try:
         cursor.execute(sql)
-
     except Exception, ex:
         print sql
         print Exception,":",ex

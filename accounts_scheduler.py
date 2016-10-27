@@ -1,23 +1,32 @@
 # coding:utf8
 # 按follow抓取
 # 按fans抓取　太多，且很多共享内容为空
-#　进程死掉的时候，重启进程
+# 进程死掉的时候，重启进程
 from basic_task import BasicTask
 from accounts import Accounts
-
+import time
 
 class AccountsScheduler(BasicTask):
     def __init__(self):
         BasicTask.__init__(self)
 
     def inter(self):
-        account = 2
+        sql = """
+            SELECT follow_uk,is_follow_crawler
+            FROM yunpan.accounts
+            WHERE is_follow_crawler is FALSE AND follow_count>0
+            LIMIT 1
+        """
+        time.sleep(0.5)
+        cursor = self.mysql_conn.cursor()
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        if result is not None:
+            account = result[0][0]
+        else:
+            account = None
         while (account is not None):
-            account = self.db.accounts.find_one({'crawler': {'$exists': False}, 'follow_count': {'$gt': 10}})
-            if account is not None:
-                Accounts(account['follow_uk']).execute()
-            else:
-                Accounts().execute()
+            account = Accounts(account).execute()
 
 
 if __name__ == '__main__':

@@ -1,25 +1,28 @@
 # coding: utf8
 import urllib2
 import json
-import pymongo
+import sys
+
+import MySQLdb
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 # 抓取过快问题
 class BasicTask():
     def __init__(self):
-        self.conn = pymongo.MongoClient("127.0.0.1", 27017)
-        self.db = self.conn.accounts
         self.sleep_time_len = 90
+
+        self.mysql_conn =MySQLdb.connect(db='yunpan', host='localhost', user='root', passwd='admin')
+        self.cursor = self.mysql_conn.cursor()
 
     def get_response(self, url, headers={}):
         response_json = None
-        print 'url:%s'%url
-        print headers
         # TODO 错误处理，如果出错，延迟1分钟
         try:
             request = urllib2.Request(url, headers=headers)
             response = urllib2.urlopen(request)
             response_json = response.read()
             # print url
-            print response_json
             result = json.loads(response_json)
             return result
         except Exception as ex:

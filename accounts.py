@@ -4,7 +4,8 @@ from basic_task import BasicTask
 # 抓取判重问题
 # 最后检测时间
 from time import ctime, sleep
-
+import time
+import datetime
 
 class Accounts(BasicTask):
     """
@@ -36,7 +37,6 @@ class Accounts(BasicTask):
         }
         """
 
-
     def execute(self):
         """
         生成所在的任务
@@ -45,18 +45,89 @@ class Accounts(BasicTask):
         self.get_first_task()
         self.gen_task()
         self.update_follow_uk()
+        return self.next_follow_uk()
         # 更新 self.uk对的信息
 
     def update_follow_uk(self):
-        self.db.accounts.update({'follow_uk': self.uk}, {'$set': {'crawler': True}})
+        sql = """
+            update yunpan.accounts
+            set is_follow_crawler = TRUE
+            where follow_uk='%s'
+        """ % self.uk
+        print sql
+        cursor = self.mysql_conn.cursor()
+        cursor.execute(sql)
 
+        cursor.close()
+        self.mysql_conn.commit()
+
+    def next_follow_uk(self):
+        sql = """
+            SELECT follow_uk,is_follow_crawler
+            FROM yunpan.accounts
+            WHERE is_follow_crawler is FALSE AND follow_count>0
+            LIMIT 1
+        """
+        cursor = self.mysql_conn.cursor()
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        return result[0][0]
     def save_follows(self, follow_list):
+        query_sql = """
+            select id from yunpan.accounts where follow_uk='{follow_uk}'
+        """
+        insert_sql = """
+            INSERT INTO yunpan.accounts(follow_uk, fans_count, parent_follow_uk, avatar_url,
+            pubshare_count, follow_uname, follow_count, user_type, intro, album_count,
+            is_vip, type, follow_time, create_time, update_time, is_follow_crawler, is_files_crawler)
+            VALUES('{0[follow_uk]}',{0[fans_count]},'{0[parent_follow_uk]}','{0[avatar_url]}',{0[pubshare_count]},
+            '{0[follow_uname]}',{0[follow_count]},{0[user_type]},'{0[intro]}',{0[album_count]},{0[is_vip]},{0[type]},
+            '{0[follow_time]}','{0[create_time]}','{0[update_time]}',{0[is_follow_crawler]},{0[is_files_crawler]})
+        """
+        update_sql = """
+            UPDATE yunpan.accounts
+            SET fans_count={0[fans_count]} ,
+                parent_follow_uk='{0[parent_follow_uk]}',
+                avatar_url='{0[avatar_url]}',
+                pubshare_count={0[pubshare_count]},
+                follow_uname='{0[follow_uname]}',
+                follow_count={0[follow_count]},
+                user_type={0[user_type]},
+                intro='{0[intro]}',
+                album_count={0[album_count]},
+                is_vip={0[is_vip]},
+                type={0[type]},
+                follow_time='{0[follow_time]}',
+                update_time='{0[update_time]}',
+                is_follow_crawler={0[is_follow_crawler]}
+            WHERE follow_uk={0[follow_uk]}
+        """
+        # --- create_time='{create_time}',
+        # is_files_crawler={0[is_files_crawler]},
+
+        cursor = self.mysql_conn.cursor()
         for row in follow_list:
-            row['follow_uk'] = str(row['follow_uk'])
-            row['parent_follow_uk'] = [self.uk]
-            self.db.accounts.update({'follow_uk': row['follow_uk']}, {'$set': row}, upsert=True)
-            # TODO　更新
-            # self.db.accounts.insert_many(follow_list)
+            uk = str(row['follow_uk'])
+            row['follow_uk'] = uk
+            row['parent_follow_uk'] = self.uk
+            row['follow_uname']=row['follow_uname'].replace('\'','\\\'')
+            row['intro']=row['intro'].replace('\'','\\\'')
+            row['follow_time']=time.strftime('%Y-%m-%d %H-%M-%S',time.gmtime(row['follow_time']))
+            cursor.execute(query_sql.format(follow_uk=uk))
+            result = cursor.fetchall()
+            row['update_time'] = datetime.datetime.today()
+            if (len(result) > 0):
+                row['parent_follow_uk'] = '%s,%s' % (result[0][0], row['parent_follow_uk'])
+                row['is_follow_crawler']=True
+                cursor.execute(update_sql.format(row))
+            else:
+                row['create_time']=datetime.datetime.today()
+                row['is_follow_crawler']=False
+                row['is_files_crawler']=False
+                print insert_sql.format(row)
+                cursor.execute(insert_sql.format(row))#update_time
+        cursor.close()
+        self.mysql_conn.commit()
 
     def get_first_task(self):
         url = self.url_tpl.format(uk=self.uk, limit=self.limit, start=0)
