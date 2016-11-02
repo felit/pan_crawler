@@ -119,13 +119,17 @@ class Accounts(BasicTask):
             if (len(result) > 0):
                 row['parent_follow_uk'] = '%s,%s' % (result[0][0], row['parent_follow_uk'])
                 row['is_follow_crawler']=True
-                cursor.execute(update_sql.format(row))
+                sql = update_sql.format(row)
             else:
                 row['create_time']=datetime.datetime.today()
                 row['is_follow_crawler']=False
                 row['is_files_crawler']=False
                 print insert_sql.format(row)
-                cursor.execute(insert_sql.format(row))#update_time
+                sql = insert_sql.format(row)#update_time
+            try:
+                cursor.execute(sql)
+            except Exception,ex:
+                print ex
         cursor.close()
         self.mysql_conn.commit()
 

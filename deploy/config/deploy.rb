@@ -2,7 +2,7 @@
 lock '3.5.0'
 
 set :application, 'yunpan_crawler'
-set :repo_url, 'git@github.com:felit/pan_crawler.git'
+set :repo_url, '/var/repositories/pan_crawler.git'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -37,12 +37,11 @@ set :deploy_to, '/var/crawler'
 
 namespace :deploy do
 
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+  task :published do
+    on roles(:app), in: :groups, limit: 3, wait: 10 do
+      within(current_path) do
+         execute :python,'accounts_scheduler.py'
+      end
     end
   end
 
