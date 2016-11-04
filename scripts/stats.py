@@ -8,3 +8,9 @@ sql = """
 cursor.execute(sql)
 result = cursor.fetchall()
 print result
+sql = """
+    select sum(pubshare_count) from accounts
+"""
+cursor.execute(sql)
+result = cursor.fetchall()
+print result
