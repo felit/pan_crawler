@@ -40,7 +40,8 @@ namespace :deploy do
   task :published do
     on roles(:app), in: :groups, limit: 3, wait: 10 do
       within(current_path) do
-         execute :python,'accounts_scheduler.py'
+         #execute :python,'accounts_scheduler.py'
+         execute :screen, ' -d -m python accounts_scheduler.py'
       end
     end
   end
