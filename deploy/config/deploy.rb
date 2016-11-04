@@ -54,4 +54,11 @@ namespace :deploy do
     end
   end
 
+  task :pid do
+    on roles(:app), in: :groups, limit: 3, wait: 10 do
+      within(current_path) do
+         execute "ps -ef | grep accounts | grep -v grep"
+      end
+    end
+  end
 end
