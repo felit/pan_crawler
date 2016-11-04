@@ -43,14 +43,12 @@ namespace :deploy do
          #execute :python,'accounts_scheduler.py'
          execute "ps -ef | grep accounts | grep -v grep | awk '{print $2}'|xargs kill -9" rescue nil
          execute :screen, ' -d -m python accounts_scheduler.py'
-         execute :python, 'scripts/stats.py'
       end
     end
   end
   task :stats do
     on roles(:app), in: :groups, limit: 3, wait: 10 do
       within(current_path) do
-         #execute :python,'accounts_scheduler.py'
          execute :python, 'scripts/stats.py'
       end
     end
