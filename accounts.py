@@ -153,9 +153,10 @@ class Accounts(BasicTask):
         for i in range(1, self.total / self.limit):
             url = self.url_tpl.format(uk=self.uk, limit=self.limit, start=i * self.limit)
             result = self.get_response(url)
-            if (result.has_key('follow_list')):
+            if (result is not None and result.has_key('follow_list')):
                 self.save_follows(result['follow_list'])
             else:
+                print url
                 sleep(self.sleep_time_len)
 
 
