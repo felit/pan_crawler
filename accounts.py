@@ -136,11 +136,12 @@ class Accounts(BasicTask):
     def get_first_task(self):
         url = self.url_tpl.format(uk=self.uk, limit=self.limit, start=0)
         result = self.get_response(url)
-        if (result.has_key('follow_list')):
+        if result is not None and (result.has_key('follow_list')):
             self.total = result['total_count']
             self.save_follows(result['follow_list'])
             sleep(1)
         else:
+            print url
             sleep(self.sleep_time_len)
 
 

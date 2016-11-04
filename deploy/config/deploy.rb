@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.5.0'
+#lock '3.5.0'
 
 set :application, 'yunpan_crawler'
 set :repo_url, '/var/repositories/pan_crawler.git'

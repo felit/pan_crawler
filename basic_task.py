@@ -26,7 +26,7 @@ class BasicTask():
             result = json.loads(response_json)
             return result
         except Exception as ex:
-            # print ex
+            print ex
             print response_json
 
 
