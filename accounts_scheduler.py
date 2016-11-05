@@ -21,7 +21,7 @@ class AccountsScheduler(BasicTask):
         cursor = self.mysql_conn.cursor()
         cursor.execute(sql)
         result = cursor.fetchall()
-        if result is not None:
+        if result is not None and len(result) > 0:
             account = result[0][0]
         else:
             account = None

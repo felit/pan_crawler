@@ -6,7 +6,6 @@ from basic_task import BasicTask
 from time import ctime, sleep
 import time
 import datetime
-
 class Accounts(BasicTask):
     """
     取当前帐户的关联信息

@@ -12,7 +12,7 @@ class BasicTask():
     def __init__(self):
         self.sleep_time_len = 90
 
-        self.mysql_conn =MySQLdb.connect(db='yunpan', host='localhost', user='root', passwd='admin')
+        self.mysql_conn =MySQLdb.connect(db='yunpan', host='localhost', user='root', passwd='admin',charset="utf8")
         self.cursor = self.mysql_conn.cursor()
 
     def get_response(self, url, headers={}):
