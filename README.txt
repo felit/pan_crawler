@@ -5,3 +5,7 @@ Python安装MySQLdb库
 sudo apt-get install python-pip
 sudo apt-get install python-dev
 sudo pip install mysql-python
+
+
+客户端并发抓取
+任务分配

@@ -14,6 +14,14 @@ sql = """
 cursor.execute(sql)
 share_count_result = cursor.fetchall()
 share_count = share_count_result[0][0]
+
+sql ="""
+    select date(create_time),count(*) from accounts group by date(create_time)
+"""
+cursor.execute(sql)
+date_crawler_count_result = cursor.fetchall()
+for row in date_crawler_count_result:
+    print '%s\t%s'%(row[0],row[1])
 cursor.close()
 mysql_conn.close()
 
