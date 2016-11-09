@@ -4,7 +4,7 @@ CREATE TABLE shared_files (
   like_count      INT(2),
   dCnt            INT(2),
   category        INT(6) COMMENT '类别',
-  title           INT(6) COMMENT 'title',
+  title           text COMMENT 'title',
   comment_count   INT(4),
   feed_time       DATETIME,
   public          INT(2),
@@ -26,7 +26,7 @@ CREATE TABLE shared_files (
   avatar_url      VARCHAR(256) COMMENT '头像URL',
   shareid         VARCHAR(128) COMMENT '共享编号',
   uk              varchar(32) COMMENT '帐号编号',
-  source_id       INT(8)
+  source_id       varchar(32)
 )
   ENGINE =InnoDB
   AUTO_INCREMENT =32
