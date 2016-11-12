@@ -97,9 +97,13 @@ class Shared(BasicTask):
             print insert_sql.format(record)
 
             self.cursor.execute(insert_sql.format(record))
-        self.cursor.close()
+        # self.cursor.close()
         self.mysql_conn.commit()
 
 if __name__ == '__main__':
     shared = Shared('2636470911')
+    # {u'dir_cnt': 1, u'shorturl': u'1bn2FUDh', u'like_count': 0, u'dCnt': 1, u'category': 6, u'title': u'PDF\u9605\u8bfb\u5668', u'comment_count': 0, u'feed_time': 1415039932000, u'public': u'1', u'username': u'51**jx', u'source_uid': u'931830473', u'like_status': 0, u'feed_type': u'share', u'vCnt': 27, u'filecount': 1, u'desc': u'', u'third': 0, u'data_id': u'8777071490347001723', u'tCnt': 1, u'clienttype': 0, u'filelist': [{u'category': 6, u'isdir': 1, u'server_filename': u'PDF\u9605\u8bfb\u5668', u'sign': u'6f285c34e643a1430db6e787857817f91224391c', u'fs_id': 1679724544, u'time_stamp': 1478927224, u'path': u'%2F%E5%BA%94%E7%94%A8%E8%BD%AF%E4%BB%B6%2FPDF%E9%98%85%E8%AF%BB%E5%99%A8', u'md5': u'0', u'size': 1024}], u'avatar_url': u'https://ss0.bdstatic.com/7Ls0a8Sm1A5BphGlnYG/sys/portrait/item/c99a8a37.jpg', u'shareid': u'2000682979', u'uk': 2587068245, u'source_id': u'2000682979'}
+    shared = Shared('2587068245') #有文件夹
+    # {u'dir_cnt': 1, u'shorturl': u'1hs2nnFY', u'like_count': 0, u'dCnt': 0, u'category': 6, u'title': u'\u540d\u5e08\u5e26\u4f60\u6765\u5237\u9898 8\u67084\u5185\u6709\u66f4\u65b0', u'comment_count': 0, u'feed_time': 1472117662069, u'public': u'1', u'username': u'\u533b*\u7cbe\u9009', u'source_uid': u'1199254137', u'like_status': 0, u'feed_type': u'share', u'vCnt': 26, u'filecount': 1, u'desc': u'', u'third': 0, u'data_id': u'7919125319332336499', u'tCnt': 17, u'clienttype': 0, u'filelist': [{u'category': 6, u'isdir': 1, u'server_filename': u'\u540d\u5e08\u5e26\u4f60\u6765\u5237\u9898 8\u67084\u5185\u6709\u66f4\u65b0', u'sign': u'7d2083dfdb678410b4aa07eb70ad92a7c681e85f', u'fs_id': 5547769292528, u'time_stamp': 1478927332, u'path': u'%2F2016%E8%80%83%E7%A0%94%E5%85%A8%E7%A8%8B%E4%B8%8D%E5%8A%A0%E5%AF%86%2F2016%E5%B9%B4%E6%94%BF%E6%B2%BB%2F2016%E5%B9%B4xdf%20%E8%80%83%E7%A0%94%E6%94%BF%E6%B2%BB%2F2016%E5%B9%B4%E6%96%B0%E4%B8%9C%E6%96%B9%E6%94%BF%E6%B2%BB%E5%BC%BA%E5%8C%96%E7%8F%AD%2F%E5%90%8D%E5%B8%88%E5%B8%A6%E4%BD%A0%E6%9D%A5%E5%88%B7%E9%A2%98%208%E6%9C%884%E5%86%85%E6%9C%89%E6%9B%B4%E6%96%B0', u'md5': u'0', u'size': 1024}], u'avatar_url': u'https://ss0.bdstatic.com/7Ls0a8Sm1A5BphGlnYG/sys/portrait/item/792a7b47.jpg', u'shareid': u'2437997843', u'uk': 709048228, u'source_id': u'2437997843'}
+    shared = Shared('709048228') #有文件夹列表
     shared.execute()

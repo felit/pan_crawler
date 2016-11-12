@@ -9,3 +9,4 @@ sudo pip install mysql-python
 
 客户端并发抓取
 任务分配
+文件共享确定类型:文件、目录、档案
