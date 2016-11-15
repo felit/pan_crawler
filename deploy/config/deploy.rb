@@ -43,6 +43,7 @@ namespace :deploy do
          #execute :python,'accounts_scheduler.py'
          execute "ps -ef | grep accounts | grep -v grep | awk '{print $2}'|xargs kill -9" rescue nil
          execute :screen, ' -d -m python accounts_scheduler.py'
+         execute :screen, ' -d -m python shared_scheduler.py'
       end
     end
   end

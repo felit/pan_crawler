@@ -34,3 +34,5 @@ CREATE TABLE shared_files (
   COMMENT '共享文件信息';
 ALTER TABLE shared_files ADD INDEX index_uk(uk);
 ALTER TABLE shared_files ADD INDEX index_shorturl(shorturl);
+
+# alter table shared_files modify column size BIGINT;
