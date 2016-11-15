@@ -37,15 +37,19 @@ class Shared(BasicTask):
     def execute(self):
         self.get_first_shared_files()
         self.crawler_shared_files()
-        # self.db.accounts.update({'follow_uk': self.uk}, {'$set': {'crawler_files': True}}, upsert=True)
+        sql = """
+            update accounts set is_files_crawler=True where follow_uk='%s'
+        """ %(self.uk)
+        print sql
+        cursor = self.mysql_conn.cursor()
+        cursor.execute(sql)
+        self.mysql_conn.commit()
 
     def get_first_shared_files(self):
         url =self.shared_url_tpl.format(start=0, uk=self.uk, limit=self.limit)
-        # print self.params
         response_json = self.get_response(url, self.params)
-        # print(response_json)
+        print(response_json)
         self.total_count = response_json['total_count']
-        # print response_json['records']
         self.save_records(response_json['records'])
 
     def crawler_shared_files(self):
@@ -53,7 +57,7 @@ class Shared(BasicTask):
             for i in range(1, self.total_count / self.limit):
                 url = self.shared_url_tpl.format(start=i * self.limit, uk=self.uk, limit=self.limit)
                 records = self.get_url(url)
-                print records
+                # print records
                 self.save_records(records)
 
     def get_url(self,url):
@@ -78,7 +82,6 @@ class Shared(BasicTask):
              '{0[data_id]}',{0[tCnt]},{0[clienttype]},{0[isdir]},'{0[server_filename]}','{0[path]}',{0[size]},'{0[avatar_url]}','{0[shareid]}','{0[uk]}','{0[source_id]}')
         """
         for record in records:
-            print record
             if record.has_key('feed_time'):
                 record['feed_time']=time.strftime('%Y-%m-%d %H-%M-%S',time.gmtime(record['feed_time']/1000))
 
@@ -86,17 +89,37 @@ class Shared(BasicTask):
                 record['shorturl']=''
             if not record.has_key('description'):
                 record['description']=''
-            if not record.has_key('isdir'):
-                record['isdir']='Null'
-            if not record.has_key('server_filename'):
-                record['server_filename']=''
-            if not record.has_key('path'):
-                record['path']=''
+
             if not record.has_key('size'):
                 record['size']='Null'
-            print insert_sql.format(record)
+            if record.has_key('filelist'):
+                for file in record['filelist']:
+                    if file.has_key('isdir'):
+                        if file['isdir']==1:
+                            record['isdir'] = True
+                            print file['path']
+                        else:
+                            record['isdir'] = False
+                            record['size'] = file['size']
+                    else:
+                        print record
+                    if file.has_key('path'):
+                        record['path']=file['path']
+                    else:
+                        record['path'] = ''
+                    if not file.has_key('server_filename'):
+                        record['server_filename']=''
+                    else:
+                        print file['server_filename']
+                        record['server_filename']=file['server_filename']
 
-            self.cursor.execute(insert_sql.format(record))
+                    if not record.has_key('isdir'):
+                        record['isdir']='Null'
+                        print record
+                    if not record.has_key('path'):
+                        record['path']=''
+                    print insert_sql.format(record)
+                    self.cursor.execute(insert_sql.format(record))
         # self.cursor.close()
         self.mysql_conn.commit()
 

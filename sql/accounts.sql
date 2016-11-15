@@ -25,3 +25,4 @@ CREATE TABLE accounts (
 
 ALTER TABLE accounts ADD INDEX index_follow_uk(follow_uk);
 ALTER TABLE accounts ADD INDEX index_pubshare_count(pubshare_count);
+ALTER TABLE accounts ADD INDEX index_create_time(create_time);

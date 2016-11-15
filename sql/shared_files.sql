@@ -22,7 +22,7 @@ CREATE TABLE shared_files (
   isdir           INT(2),
   server_filename VARCHAR(256) COMMENT '服务器文件名称',
   path            TEXT COMMENT '路径',
-  size            INT(8) COMMENT '文件大小(Byte)',
+  size            BIGINT COMMENT '文件大小(Byte)',
   avatar_url      VARCHAR(256) COMMENT '头像URL',
   shareid         VARCHAR(128) COMMENT '共享编号',
   uk              varchar(32) COMMENT '帐号编号',

@@ -1,2 +1,0 @@
-#/bin/bash
-cap production deploy:stats
