@@ -49,6 +49,7 @@ class Shared(BasicTask):
         url =self.shared_url_tpl.format(start=0, uk=self.uk, limit=self.limit)
         response_json = self.get_response(url, self.params)
         print(response_json)
+        # TODO 容错
         self.total_count = response_json['total_count']
         self.save_records(response_json['records'])
 

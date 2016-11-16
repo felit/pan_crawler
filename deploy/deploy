@@ -1,2 +1,4 @@
-!/bin/bash
+#!/bin/bash
+git push origin master
+git push server master
 cap production deploy

@@ -41,8 +41,9 @@ namespace :deploy do
     on roles(:app), in: :groups, limit: 3, wait: 10 do
       within(current_path) do
          #execute :python,'accounts_scheduler.py'
-         execute "ps -ef | grep accounts | grep -v grep | awk '{print $2}'|xargs kill -9" rescue nil
+         execute "ps -ef | grep accounts_scheduler | grep -v grep | awk '{print $2}'|xargs kill -9" rescue nil
          execute :screen, ' -d -m python accounts_scheduler.py'
+         execute "ps -ef | grep shared_scheduler | grep -v grep | awk '{print $2}'|xargs kill -9" rescue nil
          execute :screen, ' -d -m python shared_scheduler.py'
       end
     end
@@ -58,7 +59,7 @@ namespace :deploy do
   task :pid do
     on roles(:app), in: :groups, limit: 3, wait: 10 do
       within(current_path) do
-         execute "ps -ef | grep accounts | grep -v grep"
+         execute "ps -ef | grep py | grep -v grep"
       end
     end
   end
